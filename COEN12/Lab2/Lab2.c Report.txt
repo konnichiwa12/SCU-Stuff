@@ -1,0 +1,11 @@
+UNSORTED.C
+-Macbeth.txt :: .123sec
+-Genesis.txt :: .123sec
+-Bible.txt   :: 5.427sec
+AVG: 1.891sec
+
+SORTED.C
+-Macbeth.txt :: 0.085sec
+-Genesis.txt :: 0.094sec
+-Bible.txt   :: 6.037sec
+AVG: 2.072
