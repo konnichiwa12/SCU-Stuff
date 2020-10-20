@@ -1,0 +1,22 @@
+Worst Big-O Run times:
+
+*createDataSet: O(1)
+
+destroyDataSet: O(1)
+
+search: O(log(n))
+
+search2: o(log(n))
+
+InsertdataSet: o(n)
+
+searchBoundary: o(n)
+
+deleteAge: O(n)
+
+MaxAgeGap: O(1)
+
+printArray: o(n)
+
+
+I used on ordered array for this because its would increase the code's efficiency. I can use binary search to lower the worst case run time for searching to O(logn). Also, I made this ordered so the MaxAgeGap function is O(1). 
