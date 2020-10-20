@@ -1,0 +1,169 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <assert.h>
+#include <stdbool.h>
+#include <string.h>
+#include "list.h"
+
+typedef struct list{
+	int count;
+	struct node *head;
+	int (*compare)();
+}LIST;
+
+typedef struct node{
+	void *data;
+	struct node *next;
+	struct node *prev;
+}NODE;
+
+LIST *createList(int (*compare)()){
+	LIST *lp = malloc(sizeof(LIST));
+	assert(lp !=NULL);
+	lp->count = 0;
+	lp->head = malloc(sizeof(NODE)); //dumbass node
+	assert(lp->head != NULL);
+	NODE *dn = lp->head;
+	lp->compare = compare;
+	dn->prev = dn;
+	dn->next = dn;
+	return lp;
+}
+
+void destroyList(LIST *lp){
+	assert(lp != NULL);
+	NODE *pdel, *pnext;
+	pdel = lp->head;
+	do{
+		pnext = pdel->next;
+		free(pdel);
+		pdel = pnext;
+	}while(pdel != lp->head);
+	free(lp);
+}
+
+int numItems(LIST *lp){
+	assert(lp != NULL);
+	return lp->count;
+}
+
+void addFirst(LIST *lp, void *item){
+	assert(lp != NULL);
+	NODE *temp = malloc(sizeof(NODE));
+	assert(temp != NULL);
+	temp->data = item;
+	NODE *dn = lp->head;
+	dn->next->prev = temp;
+	temp->next = dn->next;
+	temp->prev = dn;
+	dn->next = temp;
+	lp->count++;
+	return;
+}
+
+void addLast(LIST *lp, void *item){
+	assert(lp != NULL);
+	NODE *temp = malloc(sizeof(NODE));
+	assert(temp != NULL);
+	NODE *dn = lp->head;
+	temp->data = item;
+	dn->prev->next = temp;
+	temp->next = dn;
+	temp->prev = dn->prev;
+	dn->prev = temp;
+	lp->count++;
+	return;
+}
+
+void *removeFirst(LIST *lp){
+	assert(lp != NULL);
+	NODE *pdel = lp->head->next;
+	void *N = pdel->data;
+	NODE *dn = lp->head;
+	dn->next = pdel->next;
+	pdel->next->prev = dn;
+	free(pdel);
+	lp->count--;
+	return N;
+}
+void *removeLast(LIST *lp){
+	assert(lp != NULL);
+	NODE *pdel = lp->head->prev;
+	void *N = pdel->data;
+	NODE *dn = lp->head;
+	dn->prev = pdel->prev;
+	pdel->prev->next = dn;
+	free(pdel);
+	lp->count--;
+	return N;
+}
+
+void *getFirst(LIST *lp){
+	assert(lp != NULL);
+	if (lp->count >=1){
+		return lp->head->next->data;
+	}
+	return NULL;
+}
+
+void *getLast(LIST *lp){
+	assert(lp != NULL);
+	if (lp->count >= 1){
+		return lp->head->prev->data;
+	}
+	return NULL;
+}
+
+void removeItem(LIST *lp, void *item){
+	assert(lp != NULL);
+	assert(lp->compare != NULL);
+	assert(lp->count >= 1);
+	NODE *dn = lp->head;
+	NODE *flag = dn->next;
+	while(flag != lp->head){
+		if ((*lp->compare)(flag->data, item)==0){
+			flag->prev->next = flag->next;
+			flag->next->prev = flag->prev;
+			free(flag);
+			lp->count--;
+			break;
+		}
+		else{
+			flag = flag->next;
+		}
+	}
+	return;
+}
+
+void *findItem(LIST *lp, void *item){
+	assert(lp != NULL);
+	assert(lp->compare != NULL);
+	assert(lp->count >= 1);
+	NODE *dn = lp->head;
+	NODE *flag = dn->next;
+	while(flag != lp->head){
+		if ((*lp->compare)(flag->data, item)==0){
+			return flag->data;
+		}
+		else{
+			flag = flag->next;
+		}
+	}
+	return NULL;
+}
+
+void *getItems(LIST *lp){
+	assert(lp != NULL);
+	assert(lp->count >= 1);
+	void **num = malloc(sizeof(void*)*lp->count);
+	assert(num != NULL);
+	NODE *dn = lp->head;
+	NODE *flag = dn->next;
+	int i = 0;
+	while (flag != dn){
+		num[i] = flag->data;
+		flag = flag->next;
+		i++;
+	}
+	return flag;
+}
