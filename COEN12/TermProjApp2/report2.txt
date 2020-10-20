@@ -1,0 +1,16 @@
+
+worst Big-O Run times:
+
+*createDataSet: O(1)
+
+destroyDataSet: O(1)
+
+search: O(1)
+
+InsertdataSet: o(1)
+
+deleteID: O(1)
+
+printArray: o(n)
+
+I decided to use an ordered array for this. Since IDs cannot have duplicates, I decided to make my  code put students in the index that is equal to the student's ID. This way, all of the functions are O(1) because I can tell the code to go to an index and check that spot in the array w/o any loops. Only printArray is O(n).
