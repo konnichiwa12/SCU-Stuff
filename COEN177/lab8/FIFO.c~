@@ -1,0 +1,40 @@
+// Name: Dillon Kanai 
+// Date: 11/12/20
+// Title: Lab8 – FIFO.c
+// Description: Implements FIFO
+
+typedef struct {
+    int pageno;
+    . . . 
+} ref_page;
+
+
+
+int main(int argc, char *argv[]) {
+	int cacheSize = atoi(argv[1]);	
+	ref_page cache[cacheSize]; // Cache that stores pages 
+	char pageCache[100]; // Cache that holds the input from test file
+	int totalFaults = 0, totalRequests = 0; // keeps track of the total page faults and total requests
+
+	while (fgets(pageCache, 100, stdin)) {                    
+		int page_num = atoi(pageCache); // Stores number read from file as an int
+		bool foundInCache = false;
+		totalRequests++;
+        for (i=0; i<cacheSize; i++){
+            if (cache[i].pageno == page_num){
+                foundInCache = true;
+                break; //break out loop because found page_num in cache  
+            }
+        }   
+    if (foundInCache == false){
+        //You may print the page that caused the page fault
+		printf("Page %d has faulted\n", page_num);
+        cache[placeInArray].pageno = page_num;
+	   	totalFaults++;
+ 	   	placeInArray = (placeInArray + 1)%cacheSize; //Need to keep the value within the cacheSize
+    }
+	printf("Total of %d requests received\n", totalRequests);
+	printf("Total of %d pages faulted\n", totalFaults);
+	
+	
+}

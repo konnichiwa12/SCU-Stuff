@@ -1,0 +1,61 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
+
+typedef struct{     
+        int pageno;
+        int 2chance;
+}   ref_page;
+
+int main(int argc, char *argv[]) {
+    int C_SIZE = atoi(argv[1]);
+    ref_page cache[C_SIZE]; 
+    char charCache[100];
+    int totalFaults = 0, totalRequests = 0;
+    int counter = 0;
+    int page_num, found;
+
+    for(int i = 0; i < C_SIZE; i++) { 
+        cache[i].pageno = -1;
+        cache[i].second_chance = 0;
+    }
+
+    while(fgets(charCache, 100, stdin)) {
+        page_num = atoi(charCache);
+        totalRequests++;
+        for(int i = 0; i < C_SIZE; i++) {                           
+            if(cache[i].pageno == page_num) {                   
+                cache[i].2chance = 1;                     
+                found = 0;                                      
+                break;
+            }
+            if(i == C_SIZE-1)                                   
+                found = 1;                                      
+        }
+        if(found) {                                             
+            printf("Page %d caused a fault\n", page_num);
+            totalFaults++;
+            for(int j = counter; j < C_SIZE; j++) {                 
+                if(cache[j].2chance == 1) {               
+                    cache[j].2chance = 0;                 
+                    counter++;                  
+                    if(counter == C_SIZE) {                     
+                        counter = 0;                            
+                        j = 0;                                  
+                    }
+                }
+                else {                                          
+                    cache[j].pageno = page_num;                 
+                    cache[j].2chance = 0;
+                    counter = (counter+1) % C_SIZE;
+                    break;
+                }
+            }
+        }
+    }
+    double hitrate = (totalRequests - totalFaults) / (double)totalRequests;
+    printf("%d Total Page Faults with %d Total Page Requests\n", totalFaults, totalRequests);
+    printf("Second Chance Hit rate = %f\n", hitrate);
+    return 0;
+}
